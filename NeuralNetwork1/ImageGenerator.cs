@@ -57,6 +57,7 @@ namespace NeuralNetwork1
                     img[i, j] = false;
         }
 
+        //генерируем фигуру
         public Sample GenerateFigure()
         {
             generate_figure();
@@ -66,6 +67,8 @@ namespace NeuralNetwork1
 
             FigureType type = currentFigure;
 
+            //пробегаем по картинке
+            //сначала строки, потом столбцы 200, 200
             for (int i = 0; i < 200; i++)
                 for (int j = 0; j < 200; j++)
                     if (img[i, j])
@@ -76,6 +79,7 @@ namespace NeuralNetwork1
             return new Sample(input, FigureCount, type);
         }
 
+        //возвращает левую верхнюю точку
         private Point GetLeftUpperPoint()
         {
             int x = 100 - FigureSize / 2 + rand.Next(-FigureSizeGitter / 2, FigureSizeGitter / 2);
@@ -83,6 +87,7 @@ namespace NeuralNetwork1
             return new Point(x,y);
         }
 
+        //возвращает правую нижнюю точку
         private Point GetRightDownPoint()
         {
             int x = 100 + FigureSize / 2 + rand.Next(-FigureSizeGitter / 2, FigureSizeGitter / 2);
@@ -119,6 +124,7 @@ namespace NeuralNetwork1
             }
         }
 
+        //алгоритм Брезенхема
         private void Bresenham(int x, int y, int x2, int y2)
         {
             int w = x2 - x;
@@ -157,21 +163,27 @@ namespace NeuralNetwork1
             }
         }
 
+        //генерируем треугольник
+        //всегда основание горизонтально
         public bool create_triangle()
         {
             currentFigure = FigureType.Triangle;
+            
             Point leftUpper = GetLeftUpperPoint();
             Point downLeft = GetRightDownPoint();
             int centerX = 100 + FigureCenterGitter;
-
-
+            
+            //левая сторона
             Bresenham(leftUpper.X, downLeft.Y, centerX, leftUpper.Y);
+            //правая сторона
             Bresenham(centerX, leftUpper.Y, downLeft.X, downLeft.Y);
+            //основания
             Bresenham(downLeft.X, downLeft.Y, leftUpper.X, downLeft.Y);
 
             return true;
         }
 
+        //генерируем прямоугольник
         public bool create_rectangle()
         {
             currentFigure = FigureType.Rectangle;
@@ -179,13 +191,18 @@ namespace NeuralNetwork1
             Point leftUpper = GetLeftUpperPoint();
             Point downLeft = GetRightDownPoint();
 
+            //верхняя сторона
             Bresenham(leftUpper.X, leftUpper.Y, downLeft.X, leftUpper.Y);
+            //правая сторона
             Bresenham(downLeft.X, leftUpper.Y, downLeft.X, downLeft.Y);
+            //нижняя сторона
             Bresenham(downLeft.X, downLeft.Y, leftUpper.X, downLeft.Y);
+            //левая сторонамм
             Bresenham(leftUpper.X, downLeft.Y, leftUpper.X, leftUpper.Y);
             return true;
         }
 
+        //рисуется круг
         public bool create_circle()
         {
             currentFigure = FigureType.Circle;
@@ -203,6 +220,7 @@ namespace NeuralNetwork1
             return true;
         }
 
+        //рисуем синусоиду
         public bool create_sin()
         {
             currentFigure = FigureType.Sinusiod;
@@ -224,6 +242,7 @@ namespace NeuralNetwork1
         }
 
 
+        //функция генерирует фигуру рандомно
         public void generate_figure(FigureType type = FigureType.Undef)
         {
 

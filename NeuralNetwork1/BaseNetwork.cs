@@ -42,7 +42,7 @@ namespace NeuralNetwork1
         /// Угадывает тип фигуры на основе результатов подсчётов сети.
         /// </summary>
         /// <param name="sample">Фигура, которую необходимо определить</param>
-        /// <returns></returns>
+        /// <returns>Возвращает тип фигуры</returns>
         public FigureType Predict(Sample sample)
         {
             return sample.ProcessPrediction(Compute(sample.input));

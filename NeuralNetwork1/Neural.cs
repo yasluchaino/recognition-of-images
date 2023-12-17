@@ -75,7 +75,7 @@ namespace NeuralNetwork1
         /// Вычисленная суммарная квадратичная ошибка сети. Предполагается, что целевые выходы - 1 для верного, и 0 для остальных
         /// </summary>
         /// <returns></returns>
-        public double EstimatedError()
+        public virtual double EstimatedError()
         {
             double Result = 0;
             for (int i = 0; i < Output.Length; ++i)

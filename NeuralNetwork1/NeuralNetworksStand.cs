@@ -15,9 +15,8 @@ namespace NeuralNetwork1
         /// </summary>
         GenerateImage generator = new GenerateImage();
 
-        /// <summary>
         /// Текущая выбранная через селектор нейросеть
-        /// </summary>
+
         public BaseNetwork Net
         {
             get
@@ -130,8 +129,10 @@ namespace NeuralNetwork1
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
+        //кнопка тест
         private void button2_Click(object sender, EventArgs e)
         {
+            
             Enabled = false;
             //  Тут просто тестирование новой выборки
             //  Создаём новую обучающую выборку
@@ -140,6 +141,7 @@ namespace NeuralNetwork1
             for (int i = 0; i < (int) TrainingSizeCounter.Value; i++)
                 samples.AddSample(generator.GenerateFigure());
 
+            //точность 
             double accuracy = samples.TestNeuralNetwork(Net);
 
             StatusLabel.Text = $"Точность на тестовой выборке : {accuracy * 100,5:F2}%";
@@ -148,6 +150,7 @@ namespace NeuralNetwork1
             Enabled = true;
         }
 
+        //пересоздать сеть
         private void button3_Click(object sender, EventArgs e)
         {
             //  Проверяем корректность задания структуры сети
@@ -168,11 +171,13 @@ namespace NeuralNetwork1
             networksCache = networksCache.ToDictionary(oldNet => oldNet.Key, oldNet => CreateNetwork(oldNet.Key));
         }
 
+        //выдает текущую структуру сети из текстбокса
         private int[] CurrentNetworkStructure()
         {
             return netStructureBox.Text.Split(';').Select(int.Parse).ToArray();
         }
 
+        //изменение количесвта классов
         private void classCounter_ValueChanged(object sender, EventArgs e)
         {
             generator.FigureCount = (int) classCounter.Value;
@@ -182,6 +187,7 @@ namespace NeuralNetwork1
             netStructureBox.Text = vals.Aggregate((partialPhrase, word) => $"{partialPhrase};{word}");
         }
 
+        //обучение образцу
         private void btnTrainOne_Click(object sender, EventArgs e)
         {
             if (Net == null) return;
@@ -212,6 +218,24 @@ namespace NeuralNetwork1
         private void testNetButton_MouseEnter(object sender, EventArgs e)
         {
             infoStatusLabel.Text = "Тестировать нейросеть на тестовой выборке такого же размера";
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            //  Создаём новую обучающую выборку
+            SamplesSet samples = new SamplesSet();
+
+            var curNet = Net;
+            for (int i = 0; i < 20; i++)
+                samples.AddSample(generator.GenerateFigure());
+            curNet.TrainOnDataSet(samples, 20, (100 - AccuracyCounter.Value) / 100.0, true);
+           
+
+        }
+
+        private void AccuracyCounter_Scroll(object sender, EventArgs e)
+        {
+
         }
     }
 }
